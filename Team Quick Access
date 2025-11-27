@@ -29,63 +29,157 @@
     .wrap{max-width:1120px;margin:34px auto;padding:0 20px}
     header{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
     h1{margin:0;font-size:clamp(22px,3.4vw,32px)}
-    .accent{background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .accent{
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      animation:accentGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes accentGlow{
+      0%{text-shadow:0 0 10px rgba(0,200,255,.4);}
+      50%{text-shadow:0 0 18px rgba(2,243,154,.65);}
+      100%{text-shadow:0 0 10px rgba(0,200,255,.4);}
+    }
     .note{color:var(--muted);font-size:13px;margin-top:6px}
 
+    /* Nav */
     nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    nav a{color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:999px;border:1px solid var(--border);background:#050910;transition:all .2s}
-    nav a:hover{box-shadow:var(--ring);color:#fff}
-    nav a.active{color:#050608;border:1px solid transparent;background:linear-gradient(#02f39a,#02f39a) padding-box,linear-gradient(135deg,#02f39a,#00c8ff) border-box}
+    nav a{
+      color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:999px;
+      border:1px solid var(--border);background:#050910;transition:all .2s;font-size:13px;
+      position:relative;overflow:hidden;
+    }
+    nav a::after{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(circle at 0 0,rgba(0,200,255,.25),transparent 55%);
+      opacity:0;transition:opacity .25s,transform .25s;transform:translate3d(-20%, -20%, 0);
+      pointer-events:none;
+    }
+    nav a:hover{
+      box-shadow:var(--ring);color:#fff;transform:translateY(-1px);
+    }
+    nav a:hover::after{opacity:1;transform:translate3d(0,0,0);}
+    nav a.active{
+      color:#050608;border:1px solid transparent;
+      background:linear-gradient(#02f39a,#02f39a) padding-box,
+                  linear-gradient(135deg,#02f39a,#00c8ff) border-box;
+    }
 
     .toolbar{display:flex;gap:8px;margin:14px 0 6px;flex-wrap:wrap}
-    .btn{border:1px solid var(--border);background:#050910;color:#f2f5f9;padding:8px 12px;border-radius:10px;cursor:pointer;transition:all .2s}
-    .btn:hover{box-shadow:var(--ring)}
+    .btn{
+      border:1px solid var(--border);background:#050910;color:#f2f5f9;
+      padding:8px 12px;border-radius:10px;cursor:pointer;transition:all .2s;
+      font-size:13px;
+    }
+    .btn:hover{box-shadow:var(--ring);transform:translateY(-0.5px)}
 
-    .page{margin-top:10px}.hide{display:none}
+    .page{margin-top:10px}
+    .hide{display:none}
 
+    /* Accordion / cards */
     .accordion{display:grid;gap:14px}
-    details{border:1px solid transparent;border-radius:16px;overflow:hidden;position:relative;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg, rgba(0,200,255,.85), rgba(2,243,154,.9)) border-box;transition:transform .12s}
-    details:hover{transform:translateY(-1px)}
-    details.danger{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg, rgba(255,82,87,.95), rgba(255,123,102,.9)) border-box}
-    summary{list-style:none;padding:18px 22px;cursor:pointer;display:flex;align-items:center;gap:12px;font-weight:800;user-select:none}
+    details{
+      border:1px solid transparent;border-radius:16px;overflow:hidden;position:relative;
+      background:linear-gradient(var(--card),var(--card)) padding-box,
+                 linear-gradient(135deg, rgba(0,200,255,.85), rgba(2,243,154,.9)) border-box;
+      transition:transform .12s, box-shadow .12s;
+    }
+    details:hover{transform:translateY(-1px);box-shadow:0 18px 45px rgba(0,0,0,.55);}
+    details.danger{
+      background:linear-gradient(var(--card),var(--card)) padding-box,
+                 linear-gradient(135deg, rgba(255,82,87,.95), rgba(255,123,102,.9)) border-box;
+    }
+    summary{
+      list-style:none;padding:18px 22px;cursor:pointer;display:flex;
+      align-items:center;gap:12px;font-weight:800;user-select:none;
+    }
     summary::-webkit-details-marker{display:none}
-    .chev{flex:0 0 22px;height:22px;border-radius:6px;border:1px solid var(--border);display:grid;place-items:center;transition:transform .18s;background:linear-gradient(180deg,#101624,#050910)}
-    .chev svg{width:14px;height:14px} details[open] .chev{transform:rotate(90deg)}
+    .chev{
+      flex:0 0 22px;height:22px;border-radius:6px;border:1px solid var(--border);
+      display:grid;place-items:center;transition:transform .18s;
+      background:linear-gradient(180deg,#101624,#050910);
+      box-shadow:0 0 0 1px rgba(0,0,0,.7);
+    }
+    .chev svg{width:14px;height:14px}
+    details[open] .chev{transform:rotate(90deg)}
     .panel{padding:0 22px 22px}
 
     ul.list{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
-    .row{display:flex;align-items:flex-start;gap:10px;border:1px dashed var(--border);border-radius:12px;padding:10px 12px;background:#070c15}
+    .row{
+      display:flex;align-items:flex-start;gap:10px;border:1px dashed var(--border);
+      border-radius:12px;padding:10px 12px;background:#070c15;
+      backdrop-filter:blur(8px);
+    }
     .label{font-weight:800;letter-spacing:.2px}
     .vals{display:flex;flex-wrap:wrap;gap:6px}
-    .pill{background:#050910;border:1px solid var(--border);border-radius:999px;padding:3px 9px;font-size:13px}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    .chip{margin-left:auto;font-size:12px;border:1px solid var(--border);padding:3px 8px;border-radius:999px;cursor:pointer;background:#050910;color:#dfe6ee}
+    .pill{
+      background:#050910;border:1px solid var(--border);border-radius:999px;
+      padding:3px 9px;font-size:13px;
+    }
+    .mono{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:13px;
+    }
+    .chip{
+      margin-left:auto;font-size:12px;border:1px solid var(--border);
+      padding:3px 8px;border-radius:999px;cursor:pointer;background:#050910;color:#dfe6ee;
+      white-space:nowrap;
+    }
     .chip.good{border-color:#02f39a;color:#050608;background:#02f39a}
 
+    /* Area map tab */
     .hero{display:grid;gap:12px;margin:10px 0 12px}
-    .search-big{width:100%;padding:16px 18px;border-radius:14px;border:1px solid var(--border);background:#050910;color:#f2f5f9;font-size:18px}
-    .search-big:focus{outline:none;box-shadow:var(--ring)}
-    .plan{width:100%;max-width:100%;border-radius:12px;border:1px solid var(--border)}
-    table{width:100%;border-collapse:collapse;margin-top:8px}
+    .search-big{
+      width:100%;padding:16px 18px;border-radius:14px;border:1px solid var(--border);
+      background:#050910;color:#f2f5f9;font-size:16px;
+      box-shadow:0 0 0 1px rgba(0,0,0,.8);
+    }
+    .search-big::placeholder{color:#5e6675}
+    .search-big:focus{outline:none;box-shadow:var(--ring);}
+    .plan{
+      width:100%;max-width:100%;border-radius:12px;border:1px solid var(--border);
+      cursor:zoom-in;display:block;
+    }
+    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
     th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left}
     th{color:var(--muted);font-weight:600}
     tr.off{display:none}
 
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;background:rgba(0,0,0,.88);
+      display:none;align-items:center;justify-content:center;z-index:9999;
+    }
     .lightbox.show{display:flex}
-    .lightbox img{max-width:95vw;max-height:90vh;border-radius:12px;border:1px solid #2a2f40;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .lightbox img{
+      max-width:95vw;max-height:90vh;border-radius:12px;border:1px solid #2a2f40;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
 
-    ol.top10{margin:8px 0 0 22px}
-    ol.top10 li{padding:10px 8px;border-bottom:1px dashed var(--border)}
+    /* Top10 & stats */
+    ol.top10{margin:8px 0 0 22px;padding:0}
+    ol.top10 li{
+      padding:10px 8px;border-bottom:1px dashed var(--border);
+      list-style:decimal;
+    }
     ol.top10 li:last-child{border-bottom:none}
     .stats-wrap{margin-top:12px}
-    .stats-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:110px;gap:12px}
-    .stat{background:#070c15;border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;justify-content:center;padding:16px 18px}
+    .stats-grid{
+      display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+      grid-auto-rows:110px;gap:12px;
+    }
+    .stat{
+      background:#070c15;border:1px solid var(--border);border-radius:14px;
+      display:flex;flex-direction:column;justify-content:center;padding:16px 18px;
+      box-shadow:0 0 0 1px rgba(0,0,0,.7);
+    }
     .knum{font-size:28px;font-weight:800;line-height:1}
     .lbl{font-size:12px;color:var(--muted);margin-top:6px}
     .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}
-    @media(max-width:740px){.stats-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:100px}
-      .span-5{grid-column:span 3}.span-4{grid-column:span 3}.span-3{grid-column:span 3}.span-2{grid-column:span 3}}
+
+    @media(max-width:740px){
+      .stats-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:100px}
+      .span-5{grid-column:span 3}.span-4{grid-column:span 3}.span-3{grid-column:span 3}.span-2{grid-column:span 3}
+    }
 
     @media (max-width: 540px) {
       html { font-size: 13.5px; }
@@ -129,10 +223,12 @@
     <button class="btn" id="collapseAll">Collapse all</button>
   </div>
 
+  <!-- POCs tab -->
   <section id="pocs" class="page">
     <div class="accordion" id="pocsAcc"></div>
   </section>
 
+  <!-- Areas tab -->
   <section id="areas" class="page hide">
     <div class="hero">
       <input id="searchAreas" class="search-big" type="search" placeholder="Search areas, halls, locations…" />
@@ -146,6 +242,7 @@
     </table>
   </section>
 
+  <!-- Top10 tab -->
   <section id="top10s" class="page hide">
     <section class="accordion" id="topAcc"></section>
   </section>
@@ -163,12 +260,18 @@
   1) You ONLY need to edit the blocks below: POCS, AREAS_DATA, TOP10.
   2) Do not touch anything after the line that says "RENDERING" unless you know HTML/JS.
   3) Inside each block, change the text but keep the structure:
-       - Each line in POCS becomes one row.
-       - Use "Label : Value" for Wi-Fi and timing items.
-       - Use "Responsibility — Name" for people assignments.
-       - For AREAS_DATA, each item is { feature, hall, location }.
-       - In TOP10, each name on its own line.
+       - In POCS:
+           * wifi / critical / timings use "Label : Value" or "Label — Value".
+           * stages / ops / marketing / protocol / locations / App use "Responsibility — Name".
+       - In AREAS_DATA, each item is { feature, hall, location }.
+       - In TOP10, each name on its own line, finalStats use "Label: Value".
   4) Save the file as index.html, commit/push to GitHub, and enable GitHub Pages.
+
+  Quick example for AREAS_DATA row:
+     { feature:"Registration", hall:"Hall 1", location:"Main entrance, left side" },
+
+  If unsure:
+     - Only edit text between backticks `...` or inside quotation marks "...".
 */
 
 /* POCs & Info */
@@ -201,10 +304,10 @@ Content Starts — [HH:MM] → Ends — [HH:MM]
   // [EDIT] Stages / tracks and their POCs
   stages: `
 Main Stage — [NAME]
-Stage 2 — [NAME]
-Stage 3 — [NAME]
-Workshops — [NAME]
-Labs / Hacking Arena — [NAME]
+Briefings Stage — [NAME]
+Business Hall Stage — [NAME]
+Arsenal — [NAME]
+Trainings / Labs — [NAME]
 Sponsor Demo Stage — [NAME]
 `,
 
@@ -215,7 +318,7 @@ Badging / Access Control — [NAME]
 Catering — [NAME]
 Cleaning — [NAME]
 Furniture — [NAME]
-Internet / Wi‑Fi — [NAME]
+Internet / Wi-Fi — [NAME]
 Venue Management — [NAME]
 Security — [NAME]
 Traffic / Parking — [NAME]
@@ -264,10 +367,13 @@ const AREAS_DATA = [
   // [EXAMPLE ROWS] — change to real Black Hat (or event) areas
   { feature:"Registration",          hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Main Stage",            hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Sponsor Expo",          hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Labs / Hacking Arena",  hall:"[HALL]",  location:"[Exact location text]" },
+  { feature:"Business Hall / Expo",  hall:"[HALL]",  location:"[Exact location text]" },
+  { feature:"Briefings Stage",       hall:"[HALL]",  location:"[Exact location text]" },
+  { feature:"Arsenal",               hall:"[HALL]",  location:"[Exact location text]" },
+  { feature:"Trainings / Labs",      hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Speaker Lounge",        hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"VIP Lounge",            hall:"[HALL]",  location:"[Exact location text]" },
+  { feature:"CTF / Hacking Arena",   hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Food Court",            hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Prayer Rooms",          hall:"[HALL]",  location:"[Exact location text]" },
 ];
@@ -357,9 +463,10 @@ function prettyList(block, {copyPasswords=false}={}){
   return `<ul class="list">${items}</ul>`;
 }
 
+/* Build POCs accordion */
 (function(){
   const sections = [
-    {title:'Wi‑Fi & Codes',          html: prettyList(POCS.wifi,     {copyPasswords:true})},
+    {title:'Wi-Fi & Codes',          html: prettyList(POCS.wifi,     {copyPasswords:true})},
     {title:'Critical Info',          html: prettyList(POCS.critical), danger:true},
     {title:'Show Timings',           html: prettyList(POCS.timings)},
     {title:'Stage Info & POCs',      html: prettyList(POCS.stages)},
@@ -387,6 +494,7 @@ function prettyList(block, {copyPasswords=false}={}){
   });
 })();
 
+/* Build Areas table + search + lightbox */
 (function(){
   const skipRe=/toilet|restroom/i;
   const items = AREAS_DATA
@@ -407,11 +515,20 @@ function prettyList(block, {copyPasswords=false}={}){
   });
 
   const lb=$('#lightbox');
-  $('#planThumb').addEventListener('click', ()=>{lb.classList.add('show');lb.setAttribute('aria-hidden','false')});
-  lb.addEventListener('click', ()=>{lb.classList.remove('show');lb.setAttribute('aria-hidden','true')});
-  document.addEventListener('keydown', e=>{if(e.key==='Escape') lb.classList.remove('show')});
+  $('#planThumb').addEventListener('click', ()=>{
+    lb.classList.add('show');
+    lb.setAttribute('aria-hidden','false');
+  });
+  lb.addEventListener('click', ()=>{
+    lb.classList.remove('show');
+    lb.setAttribute('aria-hidden','true');
+  });
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape') lb.classList.remove('show');
+  });
 })();
 
+/* Build Top10 + stats */
 (function(){
   const acc=$('#topAcc');
   [
@@ -424,16 +541,23 @@ function prettyList(block, {copyPasswords=false}={}){
     acc.appendChild(d);
   });
 
-  const pairBlock = s => s.trim().split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{const i=line.indexOf(':');return i<0?{label:line,value:''}:{label:line.slice(0,i).trim(), value:line.slice(i+1).trim()}});
-  const pairs = pairBlock(TOP10.finalStats);
+  const pairBlock = s => s.trim().split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{
+    const i=line.indexOf(':');
+    return i<0?{label:line,value:''}:{label:line.slice(0,i).trim(), value:line.slice(i+1).trim()};
+  });
+  const pairsStats = pairBlock(TOP10.finalStats);
   const widths=[4,3,2,3,4,3,2,3,4,3];
   const grid=document.createElement('div'); grid.className='stats-wrap';
   let inner=`<details><summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Final Key Stats</summary><div class="panel"><div class="stats-grid">`;
-  pairs.forEach((p,i)=>{ const span=widths[i%widths.length]; inner+=`<div class="stat span-${span}"><div class="knum">${p.value||'-'}</div><div class="lbl">${p.label}</div></div>`; });
+  pairsStats.forEach((p,i)=>{
+    const span=widths[i%widths.length];
+    inner+=`<div class="stat span-${span}"><div class="knum">${p.value||'-'}</div><div class="lbl">${p.label}</div></div>`;
+  });
   inner+=`</div></div></details>`;
   grid.innerHTML=inner; acc.appendChild(grid);
 })();
 
+/* Nav + Expand/Collapse */
 (function(){
   const pages=$$('.page'), links=$$('#nav a'), toolbar=$('#toolbar');
   function show(id){
@@ -441,12 +565,19 @@ function prettyList(block, {copyPasswords=false}={}){
     links.forEach(a=>a.classList.toggle('active', a.dataset.page===id));
     toolbar.style.display = (id==='areas') ? 'none' : 'flex';
   }
-  function init(){ const h=(location.hash||'#pocs').replace('#',''); show(['pocs','areas','top10s'].includes(h)?h:'pocs'); }
+  function init(){
+    const h=(location.hash||'#pocs').replace('#','');
+    show(['pocs','areas','top10s'].includes(h)?h:'pocs');
+  }
   window.addEventListener('hashchange', init); init();
 
   const getActive=()=> (links.find(a=>a.classList.contains('active'))||links[0]).dataset.page;
-  $('#expandAll').addEventListener('click',()=>{ $(`#${getActive()}`).querySelectorAll('details').forEach(d=>d.open=true); });
-  $('#collapseAll').addEventListener('click',()=>{ $(`#${getActive()}`).querySelectorAll('details').forEach(d=>d.open=false); });
+  $('#expandAll').addEventListener('click',()=>{
+    $(`#${getActive()}`).querySelectorAll('details').forEach(d=>d.open=true);
+  });
+  $('#collapseAll').addEventListener('click',()=>{
+    $(`#${getActive()}`).querySelectorAll('details').forEach(d=>d.open=false);
+  });
 })();
 </script>
 </body>
