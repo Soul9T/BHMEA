@@ -1,0 +1,419 @@
+import React, { useState } from 'react';
+import { 
+  Wifi, 
+  ChevronDown, 
+  ChevronUp, 
+  Search,
+  Copy,
+  CheckCircle,
+  MapPin,
+  Trophy,
+  Info,
+  Users,
+  AlertCircle,
+  Menu
+} from 'lucide-react';
+
+// --- DATA ---
+
+const LOCATIONS = [
+  { area: "Main Stage (Arsenal)", location: "Hall 1, North Wing", type: "Stage" },
+  { area: "Briefing Stage", location: "Hall 2, Center", type: "Stage" },
+  { area: "Business Hall", location: "Halls 3-4", type: "Exhibition" },
+  { area: "Workshop Room A", location: "Mezzanine Level, Room 201", type: "Workshop" },
+  { area: "Workshop Room B", location: "Mezzanine Level, Room 202", type: "Workshop" },
+  { area: "Media Center", location: "Entrance Foyer, Right Side", type: "Service" },
+  { area: "Speaker Lounge", location: "Behind Main Stage", type: "Restricted" },
+  { area: "Food Court", location: "Outdoor Plaza", type: "Amenity" },
+  { area: "Medical Room", location: "Hall 1, near Emergency Exit B", type: "Emergency" },
+];
+
+const GUIDE_SECTIONS = [
+  {
+    id: 'wifi',
+    title: 'Wi-Fi & Codes',
+    color: 'border-emerald-500 text-emerald-400',
+    content: (
+      <div className="space-y-4">
+        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+          <div className="text-xs text-slate-400 uppercase font-bold">Staff Network</div>
+          <div className="text-xl font-mono font-bold text-white mt-1">BHMEA_Staff</div>
+          <div className="text-sm text-emerald-400 font-mono mt-1">Pass: Secure#2025</div>
+        </div>
+        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+          <div className="text-xs text-slate-400 uppercase font-bold">Production Network</div>
+          <div className="text-xl font-mono font-bold text-white mt-1">BHMEA_Prod</div>
+          <div className="text-sm text-emerald-400 font-mono mt-1">Pass: LiveStream$99</div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'critical',
+    title: 'Critical Info',
+    color: 'border-red-500 text-red-400',
+    content: (
+      <div className="space-y-3">
+        <div className="flex items-start gap-3 bg-red-900/20 p-3 rounded-lg border border-red-500/30">
+          <AlertCircle className="shrink-0 text-red-400" size={20} />
+          <div>
+            <div className="font-bold text-red-100">Medical Emergency</div>
+            <div className="text-sm text-red-200/70">Location: Hall 1, Exit B</div>
+            <div className="text-sm text-red-200/70 mt-1">Radio Channel: <span className="font-bold text-white">#01</span></div>
+          </div>
+        </div>
+        <div className="bg-slate-800 p-3 rounded-lg border border-slate-700">
+          <div className="font-bold text-slate-200">Evacuation Assembly Point</div>
+          <div className="text-sm text-slate-400">North Plaza Parking Lot C</div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'timings',
+    title: 'Show Timings',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="space-y-2 text-sm">
+        <div className="flex justify-between py-2 border-b border-slate-700">
+          <span className="text-slate-300">Registration Open</span>
+          <span className="font-mono text-white">08:00 - 18:00</span>
+        </div>
+        <div className="flex justify-between py-2 border-b border-slate-700">
+          <span className="text-slate-300">Expo Hall</span>
+          <span className="font-mono text-white">10:00 - 17:00</span>
+        </div>
+        <div className="flex justify-between py-2 border-b border-slate-700">
+          <span className="text-slate-300">Main Stage Keynotes</span>
+          <span className="font-mono text-white">10:30 - 12:30</span>
+        </div>
+        <div className="flex justify-between py-2">
+          <span className="text-slate-300">Happy Hour</span>
+          <span className="font-mono text-white">17:00 - 19:00</span>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'stage_pocs',
+    title: 'Stage Info & POCs',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="space-y-3">
+        <div className="p-3 bg-slate-800 rounded-lg">
+          <div className="text-xs text-cyan-400 font-bold uppercase mb-1">Main Stage (Arsenal)</div>
+          <div className="text-white font-medium">POC: Sarah Jenkins</div>
+          <div className="text-slate-400 text-sm">Stage Mgr: Mike Ross</div>
+        </div>
+        <div className="p-3 bg-slate-800 rounded-lg">
+          <div className="text-xs text-cyan-400 font-bold uppercase mb-1">Briefing Stage</div>
+          <div className="text-white font-medium">POC: Ahmed Al-Farsi</div>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'ops_pocs',
+    title: 'Ops POCs',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="grid grid-cols-1 gap-2">
+        {["Security Head: Mike Stone", "Cleaning: Supervisor A", "Catering: Supervisor B", "Logistics: Team Lead C"].map((item, i) => (
+           <div key={i} className="p-2 bg-slate-800 rounded border border-slate-700 text-sm text-slate-200">
+             {item}
+           </div>
+        ))}
+      </div>
+    )
+  },
+  {
+    id: 'app_support',
+    title: 'App Support',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="bg-slate-800 p-3 rounded-lg border border-slate-700 text-sm">
+        <p className="text-slate-300 mb-2">For registration or app login issues:</p>
+        <div className="font-bold text-white">Tech Support Desk</div>
+        <div className="text-slate-400">Registration Area, Counter 1</div>
+      </div>
+    )
+  },
+  {
+    id: 'marketing',
+    title: 'Marketing Assignments',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="text-sm text-slate-400 italic">
+        Social media team coverage schedule pending final approval.
+      </div>
+    )
+  },
+  {
+    id: 'protocol',
+    title: 'Protocol POCs',
+    color: 'border-cyan-500 text-cyan-400',
+    content: (
+      <div className="space-y-2">
+         <div className="p-2 bg-slate-800 rounded text-sm text-slate-200">VIP Handling: Layla Hassan</div>
+         <div className="p-2 bg-slate-800 rounded text-sm text-slate-200">Gov. Relations: Team Lead D</div>
+      </div>
+    )
+  }
+];
+
+const STATS_SECTIONS = [
+  {
+    id: 'investors',
+    title: 'Top 10 Investment Firms',
+    color: 'border-yellow-500/50 text-yellow-400',
+    content: ["Ventures Global", "Tech Capital", "Saudi VC", "Future Fund", "Alpha Partners"].map((n, i) => (
+      <div key={i} className="py-1 px-2 text-sm text-slate-300 border-b border-slate-800 last:border-0 flex gap-2">
+        <span className="text-yellow-600 font-mono">0{i+1}</span> {n}
+      </div>
+    ))
+  },
+  {
+    id: 'speakers',
+    title: 'Top 10 Speakers',
+    color: 'border-yellow-500/50 text-yellow-400',
+    content: ["Dr. Jane Smith (AI Security)", "John Doe (Zero Day)", "Sarah Connor (Defense)", "Agent J (MIB)"].map((n, i) => (
+      <div key={i} className="py-1 px-2 text-sm text-slate-300 border-b border-slate-800 last:border-0 flex gap-2">
+        <span className="text-yellow-600 font-mono">0{i+1}</span> {n}
+      </div>
+    ))
+  },
+  {
+    id: 'exhibitors',
+    title: 'Top 10 Exhibitors',
+    color: 'border-yellow-500/50 text-yellow-400',
+    content: ["CyberCorp", "NetDefend", "CloudSafe", "DataGuard", "SecureIT"].map((n, i) => (
+      <div key={i} className="py-1 px-2 text-sm text-slate-300 border-b border-slate-800 last:border-0 flex gap-2">
+        <span className="text-yellow-600 font-mono">0{i+1}</span> {n}
+      </div>
+    ))
+  },
+  {
+    id: 'sponsors',
+    title: 'Top 10 Sponsors',
+    color: 'border-yellow-500/50 text-yellow-400',
+    content: ["MegaCorp", "GlobalBank", "TechGiant", "DefenseSys"].map((n, i) => (
+      <div key={i} className="py-1 px-2 text-sm text-slate-300 border-b border-slate-800 last:border-0 flex gap-2">
+        <span className="text-yellow-600 font-mono">0{i+1}</span> {n}
+      </div>
+    ))
+  },
+  {
+    id: 'key_stats',
+    title: 'Final Key Stats',
+    color: 'border-yellow-500/50 text-yellow-400',
+    content: (
+       <div className="grid grid-cols-2 gap-3">
+        <div className="bg-slate-800 p-3 rounded text-center">
+          <div className="text-2xl font-black text-white">14.5k</div>
+          <div className="text-[10px] text-slate-400 uppercase">Registrations</div>
+        </div>
+        <div className="bg-slate-800 p-3 rounded text-center">
+          <div className="text-2xl font-black text-emerald-400">8.4k</div>
+          <div className="text-[10px] text-slate-400 uppercase">Checked In</div>
+        </div>
+        <div className="bg-slate-800 p-3 rounded text-center">
+          <div className="text-2xl font-black text-blue-400">150</div>
+          <div className="text-[10px] text-slate-400 uppercase">VIPs</div>
+        </div>
+        <div className="bg-slate-800 p-3 rounded text-center">
+          <div className="text-2xl font-black text-purple-400">98%</div>
+          <div className="text-[10px] text-slate-400 uppercase">Satisfaction</div>
+        </div>
+      </div>
+    )
+  }
+];
+
+// --- Components ---
+
+const AccordionItem = ({ title, color, isOpen, onClick, children }) => (
+  <div className="mb-3">
+    <button 
+      onClick={onClick}
+      className={`w-full flex items-center justify-between p-4 rounded-lg bg-slate-900 border transition-all duration-200 ${isOpen ? color : 'border-slate-800 text-slate-300 hover:border-slate-700'}`}
+    >
+      <div className="flex items-center gap-3">
+        <span className="font-bold uppercase tracking-wide text-sm">{title}</span>
+      </div>
+      {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+    </button>
+    
+    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+      <div className="bg-slate-900/50 rounded-lg p-2 border border-slate-800/50">
+        {children}
+      </div>
+    </div>
+  </div>
+);
+
+const Badge = ({ type }) => {
+  const colors = {
+    Stage: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+    Exhibition: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+    Workshop: "bg-orange-500/20 text-orange-300 border-orange-500/30",
+    Emergency: "bg-red-500/20 text-red-300 border-red-500/30",
+    Restricted: "bg-slate-600/30 text-slate-400 border-slate-600/30",
+    default: "bg-slate-700/30 text-slate-300 border-slate-700/30"
+  };
+  
+  const style = colors[type] || colors.default;
+
+  return (
+    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${style}`}>
+      {type.toUpperCase()}
+    </span>
+  );
+};
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('guide'); // 'guide', 'locations', 'stats'
+  const [openSections, setOpenSections] = useState({ wifi: true }); 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const toggleSection = (id) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const filteredLocations = LOCATIONS.filter(loc => 
+    loc.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    loc.location.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="flex flex-col h-screen bg-black text-slate-100 font-sans overflow-hidden">
+      
+      {/* Header */}
+      <header className="bg-slate-950/90 backdrop-blur-md pt-10 pb-4 px-6 border-b border-slate-800 sticky top-0 z-10 shadow-lg shadow-black/50">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-black tracking-tighter text-white italic">
+              BHMEA <span className="text-emerald-500 not-italic font-sans">25</span>
+            </h1>
+            <p className="text-[10px] text-slate-500 font-bold tracking-[0.2em] uppercase mt-0.5">Team Operations</p>
+          </div>
+          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto p-4 pb-24 scrollbar-hide">
+        
+        {/* TAB 1: GUIDE (Info & POCs) */}
+        {activeTab === 'guide' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+            {GUIDE_SECTIONS.map((section) => (
+              <AccordionItem 
+                key={section.id}
+                title={section.title}
+                color={section.color}
+                isOpen={openSections[section.id]}
+                onClick={() => toggleSection(section.id)}
+              >
+                {section.content}
+              </AccordionItem>
+            ))}
+          </div>
+        )}
+
+        {/* TAB 2: LOCATIONS (Searchable List) */}
+        {activeTab === 'locations' && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 text-slate-400" size={18} />
+              <input 
+                type="text" 
+                placeholder="Search stages, rooms..." 
+                className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all placeholder:text-slate-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              {filteredLocations.map((loc, idx) => (
+                <div key={idx} className="bg-slate-900 border border-slate-800 p-4 rounded-lg flex justify-between items-center group active:border-emerald-500/50 transition-colors">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-bold text-slate-200 group-active:text-emerald-400">{loc.area}</h3>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-slate-500 text-sm">
+                      <MapPin size={14} />
+                      {loc.location}
+                    </div>
+                  </div>
+                  <Badge type={loc.type} />
+                </div>
+              ))}
+              {filteredLocations.length === 0 && (
+                <div className="text-center py-8 text-slate-600 text-sm italic">No locations found.</div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: STATS */}
+        {activeTab === 'stats' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+            {STATS_SECTIONS.map((section) => (
+              <AccordionItem 
+                key={section.id}
+                title={section.title}
+                color={section.color}
+                isOpen={openSections[section.id]}
+                onClick={() => toggleSection(section.id)}
+              >
+                {section.content}
+              </AccordionItem>
+            ))}
+          </div>
+        )}
+
+      </main>
+
+      {/* Bottom Navigation */}
+      <nav className="bg-slate-950 border-t border-slate-800 pb-safe pt-1">
+        <div className="flex justify-around items-center h-16">
+          <button 
+            onClick={() => setActiveTab('guide')}
+            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'guide' ? 'text-emerald-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            <Info size={22} className="mb-1" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Guide</span>
+            {activeTab === 'guide' && <div className="h-0.5 w-8 bg-emerald-400 mt-1 rounded-full absolute bottom-0 shadow-[0_0_8px_#34d399]" />}
+          </button>
+          
+          <div className="w-px h-8 bg-slate-800"></div>
+
+          <button 
+            onClick={() => setActiveTab('locations')}
+            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'locations' ? 'text-blue-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            <MapPin size={22} className="mb-1" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Map</span>
+            {activeTab === 'locations' && <div className="h-0.5 w-8 bg-blue-400 mt-1 rounded-full absolute bottom-0 shadow-[0_0_8px_#60a5fa]" />}
+          </button>
+          
+          <div className="w-px h-8 bg-slate-800"></div>
+          
+          <button 
+            onClick={() => setActiveTab('stats')}
+            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'stats' ? 'text-yellow-400' : 'text-slate-600 hover:text-slate-400'}`}
+          >
+            <Trophy size={22} className="mb-1" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Stats</span>
+            {activeTab === 'stats' && <div className="h-0.5 w-8 bg-yellow-400 mt-1 rounded-full absolute bottom-0 shadow-[0_0_8px_#facc15]" />}
+          </button>
+        </div>
+      </nav>
+
+    </div>
+  );
+}
