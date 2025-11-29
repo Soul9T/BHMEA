@@ -456,6 +456,24 @@ SALAM
 Al Moammar Information Systems (MIS)
 CIPHER
 Ministry of Investments of Saudi Arabia (MISA)
+`,
+
+  // [EDIT] Top KSA startups
+  startups1: `
+Leira
+Catchify
+Codepure
+Attack Insights
+EleeN
+`,
+
+  // [EDIT] Top Global startups
+  startups2: `
+Aikido
+Secolve
+Cybercheck360
+Octopus Cybersecurity
+Empeiria Ltd
 
 `,  // [EDIT] Final stats (format: Label: [value])
   finalStats: `
@@ -571,6 +589,8 @@ function prettyList(block, {copyPasswords=false}={}){
     {title:'Top 10 Speakers',        data: li(TOP10.speakers)},
     {title:'Top 10 International Brands',        data: li(TOP10.exhibitors1)},
     {title:'Top 10 Local Brands',        data: li(TOP10.exhibitors2)},
+    {title:'Startups - KSA',        data: li(TOP10.startups1)},
+    {title:'Startups - Global',        data: li(TOP10.startups2)},
   ].forEach(sec=>{
     const d=document.createElement('details');
     d.innerHTML=`<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>${sec.title}</summary><div class="panel"><ol class="top10">${sec.data.map(x=>`<li>${x}</li>`).join('')}</ol></div>`;
