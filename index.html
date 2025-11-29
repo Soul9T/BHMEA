@@ -176,6 +176,25 @@
     .lbl{font-size:12px;color:var(--muted);margin-top:6px}
     .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}
 
+    /* NEW: stat title + bullets */
+    .stat-title{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .stat-meta{
+      margin:8px 0 0;
+      padding-left:18px;
+      font-size:11px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .stat-meta li{
+      margin-bottom:3px;
+    }
+
     @media(max-width:740px){
       .stats-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:100px}
       .span-5{grid-column:span 3}.span-4{grid-column:span 3}.span-3{grid-column:span 3}.span-2{grid-column:span 3}
@@ -323,7 +342,7 @@ Catering  - Sattam/ Walaa
 Cleaning - Abdulrahman / Iyad 
 DESKS ( infohub) - Melissa/ Sattam
 F&B Areas - Ayad /Iyad
-Flowers  - Walaa/Sattam
+Flowers  - Walaa/Sattam
 Furniture set up - Sattam 
 GolfCarts/ Shuttles/Valet - Iyad / Sattam
 Internet - Iyad/Rami
@@ -399,9 +418,9 @@ const AREAS_DATA = [
   { feature:"Prayer Rooms",          hall:"[HALL]",  location:"[Exact location text]" },
 ];
 
-/* Top 10s / key stats */
+/* Top 10s / key lists */
 const TOP10 = {
-    // [EDIT] Top investors / partners / strategic guests (or delete this block)
+  // Top investors / partners / strategic guests
   investors: `
 500 Global
 Alkhizanah Capital
@@ -415,7 +434,7 @@ White Star Capital
 Merak Capital
 `,
 
-  // [EDIT] Top speakers you want the team to remember
+  // Top speakers you want the team to remember
   speakers: `
 Dr. Rumman Chowdhury, Founder & CEO, Humane Intelligence
 Devon Bryan, Global Chief Security Officer, Booking Holdings
@@ -429,7 +448,7 @@ Temi Adebambo, GM & CISO, XBOX
 Dr. Chenxi Wang, Managing General Partner, Rain Capital
 `,
 
-  // [EDIT] Top sponsors or exhibitors
+  // Top sponsors / exhibitors — International
   exhibitors1: `
 Fortinet
 ZScaler
@@ -444,7 +463,7 @@ Google Cloud Security
 Tenable
 `,
 
-  // [EDIT] Top sponsors or exhibitors
+  // Top sponsors / exhibitors — Local (KSA)
   exhibitors2: `
 Cyberani
 sirar by stc
@@ -458,7 +477,7 @@ CIPHER
 Ministry of Investments of Saudi Arabia (MISA)
 `,
 
-  // [EDIT] Top KSA startups
+  // Top KSA startups
   startups1: `
 Leira
 Catchify
@@ -467,7 +486,7 @@ Attack Insights
 EleeN
 `,
 
-  // [EDIT] Top Global startups
+  // Top Global startups
   startups2: `
 Aikido
 Secolve
@@ -475,7 +494,9 @@ Cybercheck360
 Octopus Cybersecurity
 Empeiria Ltd
 
-`,  // [EDIT] Final stats (format: Label: [value])
+`,
+
+  // Legacy final stats (can be ignored or updated)
   finalStats: `
 Attendees: [XXXX]
 Countries: [XX]
@@ -483,6 +504,50 @@ Speakers: [XXX]
 Sponsors & Exhibitors: [XXX]
 `
 };
+
+/* Curated event stats for the grid on page 3 */
+const STATS = [
+  {
+    id: 'exhibitors',
+    title: 'Exhibiting Brands',
+    main: '500',
+    bullets: [
+      '66% international / 34% local',
+      '72 unique exhibiting brands',
+      '11% year-on-year growth'
+    ]
+  },
+  {
+    id: 'startups',
+    title: 'Startups',
+    main: '37',
+    bullets: [
+      '43% local / 57% international',
+      '23% year-on-year growth in startups',
+      '4 unique countries'
+    ]
+  },
+  {
+    id: 'speakers',
+    title: 'Speakers',
+    main: '281',
+    bullets: [
+      '65% international / 35% local',
+      '68% male / 32% female',
+      '200 hours of content (+35% increase in sessions)'
+    ]
+  },
+  {
+    id: 'investors',
+    title: 'Investors',
+    main: '72',
+    bullets: [
+      '65% local / 35% international',
+      '67% year-on-year growth in investors',
+      '11 unique countries'
+    ]
+  }
+];
 </script>
 
 <!-- ================== RENDERING (DO NOT EDIT BELOW THIS LINE) ================= -->
@@ -522,7 +587,7 @@ function prettyList(block, {copyPasswords=false}={}){
     {title:'Wi-Fi & Codes',          html: prettyList(POCS.wifi,     {copyPasswords:true})},
     {title:'Critical Info',          html: prettyList(POCS.critical), danger:true},
     {title:'Show Timings',           html: prettyList(POCS.timings)},
-    {title:'Stage POCs',      html: prettyList(POCS.stages)},
+    {title:'Stage POCs',             html: prettyList(POCS.stages)},
     {title:'Ops POCs',               html: prettyList(POCS.ops)},
     {title:'App Support',            html: prettyList(POCS.App)},
     {title:'Marketing & Comms',      html: prettyList(POCS.marketing)},
@@ -584,33 +649,54 @@ function prettyList(block, {copyPasswords=false}={}){
 /* Build Top10 + stats */
 (function(){
   const acc=$('#topAcc');
+
+  // Top lists
   [
-    {title:'Top 10 Investors', data: li(TOP10.investors)},
-    {title:'Top 10 Speakers',        data: li(TOP10.speakers)},
-    {title:'Top 10 International Brands',        data: li(TOP10.exhibitors1)},
-    {title:'Top 10 Local Brands',        data: li(TOP10.exhibitors2)},
-    {title:'Startups - KSA',        data: li(TOP10.startups1)},
-    {title:'Startups - Global',        data: li(TOP10.startups2)},
+    {title:'Top 10 Investors',              data: li(TOP10.investors)},
+    {title:'Top 10 Speakers',               data: li(TOP10.speakers)},
+    {title:'Top 10 International Brands',   data: li(TOP10.exhibitors1)},
+    {title:'Top 10 Local Brands',           data: li(TOP10.exhibitors2)},
+    {title:'Startups – KSA',                data: li(TOP10.startups1)},
+    {title:'Startups – Global',             data: li(TOP10.startups2)},
   ].forEach(sec=>{
     const d=document.createElement('details');
-    d.innerHTML=`<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>${sec.title}</summary><div class="panel"><ol class="top10">${sec.data.map(x=>`<li>${x}</li>`).join('')}</ol></div>`;
+    d.innerHTML =
+      `<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>${sec.title}</summary>` +
+      `<div class="panel"><ol class="top10">${sec.data.map(x=>`<li>${x}</li>`).join('')}</ol></div>`;
     acc.appendChild(d);
   });
 
-  const pairBlock = s => s.trim().split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{
-    const i=line.indexOf(':');
-    return i<0?{label:line,value:''}:{label:line.slice(0,i).trim(), value:line.slice(i+1).trim()};
+  // Curated BHMEA stats grid
+  const statsWrap = document.createElement('div');
+  statsWrap.className = 'stats-wrap';
+
+  const statsDetails = document.createElement('details');
+  statsDetails.open = true; // open by default
+
+  statsDetails.innerHTML =
+    `<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>BHMEA Key Stats</summary>`;
+
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+
+  const grid = document.createElement('div');
+  grid.className = 'stats-grid';
+
+  STATS.forEach(stat => {
+    const card = document.createElement('div');
+    // 4 cards in one row on desktop → span-3 each (12 / 4)
+    card.className = 'stat span-3';
+    card.innerHTML =
+      `<div class="stat-title">${stat.title}</div>` +
+      `<div class="knum">${stat.main}</div>` +
+      `<ul class="stat-meta">${stat.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+    grid.appendChild(card);
   });
-  const pairsStats = pairBlock(TOP10.finalStats);
-  const widths=[4,3,2,3,4,3,2,3,4,3];
-  const grid=document.createElement('div'); grid.className='stats-wrap';
-  let inner=`<details><summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Final Key Stats</summary><div class="panel"><div class="stats-grid">`;
-  pairsStats.forEach((p,i)=>{
-    const span=widths[i%widths.length];
-    inner+=`<div class="stat span-${span}"><div class="knum">${p.value||'-'}</div><div class="lbl">${p.label}</div></div>`;
-  });
-  inner+=`</div></div></details>`;
-  grid.innerHTML=inner; acc.appendChild(grid);
+
+  panel.appendChild(grid);
+  statsDetails.appendChild(panel);
+  statsWrap.appendChild(statsDetails);
+  acc.appendChild(statsWrap);
 })();
 
 /* Nav + Expand/Collapse */
