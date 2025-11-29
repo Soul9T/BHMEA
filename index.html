@@ -227,8 +227,6 @@
       <!-- [EDIT] Change the event name here -->
       <h1><span class="accent">Black Hat MEA 2025</span> — Team Quick Access</h1>
       <div class="note">Optimized for mobile. Tap to expand.</div>
-      <!-- Optional short usage note for the team -->
-      <!-- Example: "Edit only the CONFIG section at the bottom of this file (POCS, AREAS_DATA, TOP10)." -->
     </div>
     <nav id="nav">
       <a data-page="pocs" class="active" href="#pocs">POCs & Info</a>
@@ -251,7 +249,6 @@
   <section id="areas" class="page hide">
     <div class="hero">
       <input id="searchAreas" class="search-big" type="search" placeholder="Search areas, halls, locations…" />
-      <!-- [EDIT] Replace Floorplan.png with your own map image but keep the same file name, or change the src below -->
       <img id="planThumb" class="plan" src="Floorplan.png" alt="Event Floorplan overview" />
       <span class="note">Tap map to zoom. Results below are A→Z.</span>
     </div>
@@ -273,47 +270,27 @@
 
 <!-- ================== CONFIG TO EDIT (CONTENT ONLY) ================= -->
 <script>
-/*
-  HOW TO USE (Share this with the team):
-
-  1) You ONLY need to edit the blocks below: POCS, AREAS_DATA, TOP10.
-  2) Do not touch anything after the line that says "RENDERING" unless you know HTML/JS.
-  3) Inside each block, change the text but keep the structure:
-       - In POCS:
-           * wifi / critical / timings use "Label : Value" or "Label — Value".
-           * stages / ops / marketing / protocol / locations / App use "Responsibility — Name".
-       - In AREAS_DATA, each item is { feature, hall, location }.
-       - In TOP10, each name on its own line, finalStats use "Label: Value".
-  4) Save the file as index.html, commit/push to GitHub, and enable GitHub Pages.
-
-  Quick example for AREAS_DATA row:
-     { feature:"Registration", hall:"Hall 1", location:"Main entrance, left side" },
-
-  If unsure:
-     - Only edit text between backticks `...` or inside quotation marks "...".
-*/
-
 /* POCs & Info */
 const POCS = {
-  // [EDIT] Wi-Fi / codes / generic quick info
+  // Wi-Fi / codes / generic quick info
   wifi: `
 Staff WiFi : [NETWORK NAME]
 Password : [PASSWORD]
 `,
 
-  // [EDIT] Critical / emergency info
+  // Critical / emergency info
   critical: `
 Emergency (Medical) — [LOCATION / HALL]
 Lost & Found — [LOCATION]
 `,
 
-  // [EDIT] Show timings (registration, expo, content, etc.)
+  // Show timings (registration, expo, content, etc.)
   timings: `
 Show Open — [HH:MM] → Show Close — [HH:MM]
 Content Starts — [HH:MM] → Ends — [HH:MM]
 `,
 
-  // [EDIT] Stages / tracks and their POCs
+  // Stages / tracks and their POCs
   stages: `
 Executive Summit - Nameesha
 DeepDive - Aman
@@ -332,7 +309,7 @@ Podcast - Elizabeth
 
 `,
 
-  // [EDIT] Ops responsibilities and owners
+  // Ops responsibilities and owners
   ops: `
 Activity Zones / CTF  - Iyad/Abdulrahman
 Badges/vests  - Sattam / Mohammed
@@ -365,7 +342,7 @@ Wayfinding - Jad / Iyad
 
 `,
 
-  // [EDIT] Marketing / content responsibilities
+  // Marketing / content responsibilities
   marketing: `
 Design — [NAME]
 Social Media (Onsite) — [NAME]
@@ -375,7 +352,7 @@ Reg Stats / Dashboards — [NAME]
 VIP Comms — [NAME]
 `,
 
-  // [EDIT] Protocol / VIP / government
+  // Protocol / VIP / government
   protocol: `
 Government & Protocol Support — [NAME]
 VIP Tours — [NAME]
@@ -384,7 +361,7 @@ Government Catering & Crowd Support — [NAME]
 Key Escalation (urgent) — [NAME]
 `,
 
-  // [EDIT] Key locations to find quickly
+  // Key locations to find quickly
   locations: `
 Info Desk — [LOCATION]
 Medical — [LOCATION]
@@ -394,24 +371,22 @@ Merch Store — [LOCATION]
 Prayer Rooms — [LOCATION]
 `,
 
-  // [EDIT] App / tech support
+  // App / tech support
   App: `
 Event App Support — [NAME / EMAIL]
 Badge / QR Support — [NAME / EMAIL]
 `,
 
-  // [EDIT] App / tech support
-  Tickets&Reg: `
+  // Customer Support / Paid Tickets / Reg
+  ticketsReg: `
 Customer Support — Mohammed Alzaydi
 Reg — VAS
 Paid Tickets — Tarina
+`
 };
 
-
-/* Areas data (area map table)
-   Each object = one row in the table. Duplicate and edit as needed. */
+/* Areas data */
 const AREAS_DATA = [
-  // [EXAMPLE ROWS] — change to real Black Hat (or event) areas
   { feature:"Registration",          hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Main Stage",            hall:"[HALL]",  location:"[Exact location text]" },
   { feature:"Business Hall / Expo",  hall:"[HALL]",  location:"[Exact location text]" },
@@ -427,7 +402,6 @@ const AREAS_DATA = [
 
 /* Top 10s / key lists */
 const TOP10 = {
-  // Top investors / partners / strategic guests
   investors: `
 500 Global
 Alkhizanah Capital
@@ -441,7 +415,6 @@ White Star Capital
 Merak Capital
 `,
 
-  // Top speakers you want the team to remember
   speakers: `
 Dr. Rumman Chowdhury, Founder & CEO, Humane Intelligence
 Devon Bryan, Global Chief Security Officer, Booking Holdings
@@ -455,7 +428,6 @@ Temi Adebambo, GM & CISO, XBOX
 Dr. Chenxi Wang, Managing General Partner, Rain Capital
 `,
 
-  // Top sponsors / exhibitors — International
   exhibitors1: `
 Fortinet
 ZScaler
@@ -470,7 +442,6 @@ Google Cloud Security
 Tenable
 `,
 
-  // Top sponsors / exhibitors — Local (KSA)
   exhibitors2: `
 Cyberani
 sirar by stc
@@ -484,7 +455,6 @@ CIPHER
 Ministry of Investments of Saudi Arabia (MISA)
 `,
 
-  // Top KSA startups
   startups1: `
 Leira
 Catchify
@@ -493,7 +463,6 @@ Attack Insights
 EleeN
 `,
 
-  // Top Global startups
   startups2: `
 Aikido
 Secolve
@@ -503,7 +472,6 @@ Empeiria Ltd
 
 `,
 
-  // Legacy final stats (can be ignored or updated)
   finalStats: `
 Attendees: [XXXX]
 Countries: [XX]
@@ -591,16 +559,16 @@ function prettyList(block, {copyPasswords=false}={}){
 /* Build POCs accordion */
 (function(){
   const sections = [
-    {title:'Wi-Fi & Codes',          html: prettyList(POCS.wifi,     {copyPasswords:true})},
-    {title:'Critical Info',          html: prettyList(POCS.critical), danger:true},
-    {title:'Show Timings',           html: prettyList(POCS.timings)},
-    {title:'Stage POCs',             html: prettyList(POCS.stages)},
-    {title:'Ops POCs',               html: prettyList(POCS.ops)},
-    {title:'App Support',            html: prettyList(POCS.App)},
-    {title:'Customer support - Paid tickets - Reg',            html: prettyList(Tickets&Reg)},
-    {title:'Marketing & Comms',      html: prettyList(POCS.marketing)},
-    {title:'Protocol / VIP',         html: prettyList(POCS.protocol)},
-    {title:'Key Locations',          html: prettyList(POCS.locations)}
+    {title:'Wi-Fi & Codes',                      html: prettyList(POCS.wifi, {copyPasswords:true})},
+    {title:'Critical Info',                      html: prettyList(POCS.critical), danger:true},
+    {title:'Show Timings',                       html: prettyList(POCS.timings)},
+    {title:'Stage POCs',                         html: prettyList(POCS.stages)},
+    {title:'Ops POCs',                           html: prettyList(POCS.ops)},
+    {title:'App Support',                        html: prettyList(POCS.App)},
+    {title:'Customer Support – Paid Tickets – Reg', html: prettyList(POCS.ticketsReg)},
+    {title:'Marketing & Comms',                  html: prettyList(POCS.marketing)},
+    {title:'Protocol / VIP',                     html: prettyList(POCS.protocol)},
+    {title:'Key Locations',                      html: prettyList(POCS.locations)}
   ];
   const acc = $('#pocsAcc');
   sections.forEach(sec=>{
@@ -679,7 +647,7 @@ function prettyList(block, {copyPasswords=false}={}){
   statsWrap.className = 'stats-wrap';
 
   const statsDetails = document.createElement('details');
-  statsDetails.open = true; // open by default
+  statsDetails.open = true;
 
   statsDetails.innerHTML =
     `<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>BHMEA Key Stats</summary>`;
@@ -692,7 +660,6 @@ function prettyList(block, {copyPasswords=false}={}){
 
   STATS.forEach(stat => {
     const card = document.createElement('div');
-    // 4 cards in one row on desktop → span-3 each (12 / 4)
     card.className = 'stat span-3';
     card.innerHTML =
       `<div class="stat-title">${stat.title}</div>` +
