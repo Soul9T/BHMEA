@@ -543,9 +543,9 @@ function prettyList(block, {copyPasswords=false}={}){
 (function(){
   const acc=$('#topAcc');
   [
-    {title:'Top 10 VIPs / Investors', data: li(TOP10.investors)},
+    {title:'Top 10 Investors', data: li(TOP10.investors)},
     {title:'Top 10 Speakers',        data: li(TOP10.speakers)},
-    {title:'Top 10 Sponsors',        data: li(TOP10.exhibitors)},
+    {title:'Top 10 Exhibitors',        data: li(TOP10.exhibitors)},
   ].forEach(sec=>{
     const d=document.createElement('details');
     d.innerHTML=`<summary><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>${sec.title}</summary><div class="panel"><ol class="top10">${sec.data.map(x=>`<li>${x}</li>`).join('')}</ol></div>`;
