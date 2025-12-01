@@ -126,35 +126,6 @@
     }
     .chip.good{border-color:#02f39a;color:#050608;background:#02f39a}
 
-    /* Area map tab */
-    .hero{display:grid;gap:12px;margin:10px 0 12px}
-    .search-big{
-      width:100%;padding:16px 18px;border-radius:14px;border:1px solid var(--border);
-      background:#050910;color:#f2f5f9;font-size:16px;
-      box-shadow:0 0 0 1px rgba(0,0,0,.8);
-    }
-    .search-big::placeholder{color:#5e6675}
-    .search-big:focus{outline:none;box-shadow:var(--ring);}
-    .plan{
-      width:100%;max-width:100%;border-radius:12px;border:1px solid var(--border);
-      cursor:zoom-in;display:block;
-    }
-    table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
-    th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left}
-    th{color:var(--muted);font-weight:600}
-    tr.off{display:none}
-
-    /* Lightbox */
-    .lightbox{
-      position:fixed;inset:0;background:rgba(0,0,0,.88);
-      display:none;align-items:center;justify-content:center;z-index:9999;
-    }
-    .lightbox.show{display:flex}
-    .lightbox img{
-      max-width:95vw;max-height:90vh;border-radius:12px;border:1px solid #2a2f40;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-    }
-
     /* Top10 & stats */
     ol.top10{margin:8px 0 0 22px;padding:0}
     ol.top10 li{
@@ -176,7 +147,7 @@
     .lbl{font-size:12px;color:var(--muted);margin-top:6px}
     .span-2{grid-column:span 2}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}
 
-    /* NEW: stat title + bullets */
+    /* stat title + bullets */
     .stat-title{
       font-size:12px;
       text-transform:uppercase;
@@ -211,7 +182,6 @@
       .row  { padding: 7px 9px; gap: 6px; }
       .label{ font-weight: 700; }
       .pill  { font-size: 10.5px; padding: 2px 7px; }
-      .search-big { font-size: 15px; padding: 12px 14px; }
       table th, table td { font-size: 12.5px; padding: 9px; }
     }
     @media (max-width: 380px) {
@@ -230,7 +200,6 @@
     </div>
     <nav id="nav">
       <a data-page="pocs" class="active" href="#pocs">POCs & Info</a>
-      <a data-page="areas" href="#areas">Area Map</a>
       <a data-page="top10s" href="#top10s">Top 10s</a>
     </nav>
   </header>
@@ -245,27 +214,10 @@
     <div class="accordion" id="pocsAcc"></div>
   </section>
 
-  <!-- Areas tab -->
-  <section id="areas" class="page hide">
-    <div class="hero">
-      <input id="searchAreas" class="search-big" type="search" placeholder="Search areas, halls, locations…" />
-      <img id="planThumb" class="plan" src="Floorplan.png" alt="Event Floorplan overview" />
-      <span class="note">Tap map to zoom. Results below are A→Z.</span>
-    </div>
-    <table id="areasTable">
-      <thead><tr><th>AREA / FEATURE</th><th>Hall</th><th>LOCATION</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
   <!-- Top10 tab -->
   <section id="top10s" class="page hide">
     <section class="accordion" id="topAcc"></section>
   </section>
-</div>
-
-<div id="lightbox" class="lightbox" aria-hidden="true">
-  <img id="lightboxImg" src="Floorplan.png" alt="Floorplan enlarged" />
 </div>
 
 <!-- ================== CONFIG TO EDIT (CONTENT ONLY) ================= -->
@@ -413,20 +365,8 @@ Customer Support — Mohammed Alzaydi
 Reg — VAS
 Paid Tickets — Tarina
 `
-const AREAS_DATA = [
-  // [EXAMPLE ROWS] — change to real Black Hat (or event) areas
-  { feature:"Registration",          hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Main Stage",            hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Business Hall / Expo",  hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Briefings Stage",       hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Arsenal",               hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Trainings / Labs",      hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Speaker Lounge",        hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"VIP Lounge",            hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"CTF / Hacking Arena",   hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Food Court",            hall:"[HALL]",  location:"[Exact location text]" },
-  { feature:"Prayer Rooms",          hall:"[HALL]",  location:"[Exact location text]" },
-];
+};
+
 /* Top 10s / key lists */
 const TOP10 = {
   investors: `
@@ -507,7 +447,7 @@ Sponsors & Exhibitors: [XXX]
 `
 };
 
-/* Curated event stats for the grid on page 3 */
+/* Curated event stats for the grid on page 2 */
 const STATS = [
   {
     id: 'exhibitors',
@@ -615,40 +555,6 @@ function prettyList(block, {copyPasswords=false}={}){
   });
 })();
 
-/* Build Areas table + search + lightbox */
-(function(){
-  const skipRe=/toilet|restroom/i;
-  const items = AREAS_DATA
-    .filter(r=>!skipRe.test(r.feature))
-    .sort((a,b)=>a.feature.localeCompare(b.feature,'en',{sensitivity:'base'}));
-
-  const tbody = $('#areasTable tbody');
-  items.forEach(r=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML = `<td>${r.feature}</td><td>${r.hall}</td><td>${r.location}</td>`;
-    tbody.appendChild(tr);
-  });
-
-  const rows = $$('#areasTable tbody tr');
-  $('#searchAreas').addEventListener('input', e=>{
-    const term = e.target.value.trim().toLowerCase();
-    rows.forEach(tr=>tr.classList.toggle('off', !tr.textContent.toLowerCase().includes(term)));
-  });
-
-  const lb=$('#lightbox');
-  $('#planThumb').addEventListener('click', ()=>{
-    lb.classList.add('show');
-    lb.setAttribute('aria-hidden','false');
-  });
-  lb.addEventListener('click', ()=>{
-    lb.classList.remove('show');
-    lb.setAttribute('aria-hidden','true');
-  });
-  document.addEventListener('keydown', e=>{
-    if(e.key==='Escape') lb.classList.remove('show');
-  });
-})();
-
 /* Build Top10 + stats */
 (function(){
   const acc=$('#topAcc');
@@ -707,11 +613,11 @@ function prettyList(block, {copyPasswords=false}={}){
   function show(id){
     pages.forEach(p=>p.classList.toggle('hide', p.id!==id));
     links.forEach(a=>a.classList.toggle('active', a.dataset.page===id));
-    toolbar.style.display = (id==='areas') ? 'none' : 'flex';
+    toolbar.style.display = 'flex';
   }
   function init(){
     const h=(location.hash||'#pocs').replace('#','');
-    show(['pocs','areas','top10s'].includes(h)?h:'pocs');
+    show(['pocs','top10s'].includes(h)?h:'pocs');
   }
   window.addEventListener('hashchange', init); init();
 
